@@ -336,6 +336,7 @@ class TestS3Utils:
             ("/", {"host": "bucket.s3.us-west-1.amazonaws.com"}, "bucket"),
             ("/", {"host": "bucket.s3.us-west-2.amazonaws.com"}, "bucket"),
             ("/", {"host": "bucket.s3.localhost.localstack.cloud"}, "bucket"),
+            ("/", {"host": "bucket.localhost"}, "bucket"),
             (
                 "/",
                 {"host": "bucket-1.s3-website.localhost.localstack.cloud"},
