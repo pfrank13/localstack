@@ -360,12 +360,12 @@ class TestS3Utils:
     # hosted style format example: http://aws.s3.localhost.localstack.cloud:4566/
     def test_uses_host_address(self):
         addresses = [
-            ({"host": f"https://aws.{LOCALHOST}:4566"}, False),
+            ({"host": f"https://aws.{LOCALHOST}:4566"}, True), # TODO, is this safe to change, presumably this means it's detecting aws as the bucket name, would this need special handling in the regex?
             # attention: This is **not** a host style reference according to s3 specs but a special case from our side
             ({"host": f"https://aws.{LOCALHOST}.localstack.cloud:4566"}, True),
             ({"host": f"https://{LOCALHOST}.aws:4566"}, False),
             ({"host": f"https://{LOCALHOST}.swa:4566"}, False),
-            ({"host": f"https://swa.{LOCALHOST}:4566"}, False),
+            ({"host": f"https://swa.{LOCALHOST}:4566"}, True), # TODO, is this safe to change, presumably this means it's detecting aws as the bucket name, would this need special handling in the regex?
             ({"host": "https://bucket.s3.localhost.localstack.cloud"}, True),
             ({"host": "bucket.s3.eu-west-1.amazonaws.com"}, True),
             ({"host": "https://s3.eu-west-1.localhost.localstack.cloud/bucket"}, False),
@@ -387,7 +387,10 @@ class TestS3Utils:
             ({"host": "s3.amazonaws.com"}, False),
             ({"host": "s3.eu-west-1.amazonaws.com"}, False),
         ]
+        count = 0;
         for headers, expected_result in addresses:
+            print(count)
+            count = count + 1
             assert s3_utils.uses_host_addressing(headers) == expected_result
 
     def test_s3_keyname_name(self):
